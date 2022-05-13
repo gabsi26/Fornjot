@@ -170,6 +170,16 @@ pub fn sweep_shape(
                         vertex_bottom_to_edge
                             .entry(vertex_bottom.clone())
                             .or_insert_with(|| {
+                                // TASK: This looks like a bug. We should create
+                                //       a new curve here, that connects both
+                                //       vertices.
+                                //
+                                //       I think the reason it still works, is
+                                //       that the curve of a line segment is
+                                //       never actually used. The curve is used
+                                //       for approximation, but for the
+                                //       approximation of a line segment, both
+                                //       vertices are enough.
                                 let curve = target
                                     .insert(edge_source.get().curve())
                                     .unwrap();
