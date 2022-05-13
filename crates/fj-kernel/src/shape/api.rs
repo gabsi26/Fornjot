@@ -185,6 +185,29 @@ impl Shape {
     pub fn faces(&self) -> Iter<Face> {
         self.stores.faces.iter()
     }
+
+    // TASK: Implement `clone_and_create_mapping`. This method returns a new
+    //       `Shape` instance that is a clone of the original `Shape`, and also
+    //       a `Mapping`. The `Mapping` contains pairs of handles. These pairs
+    //       map the handles of the original shape to handles of the cloned
+    //       shape.
+    //
+    //       Such a method might be helpful in the implementation of the sweep
+    //       operation.
+
+    // TASK: `Mapping::merge` should exists. Calling `a.merge(b)` should result
+    //       in a new `Mapping`, `c`. For every pair `1 -> 2` in `a`, for which
+    //       a corresponding pair `2 -> 3` exists in `b`, a pair `1 -> 3` should
+    //       exist in `c`.
+    //
+    //       Such a method might be helpful in the implementation of the sweep
+    //       operation.
+
+    // TASK: Add two different merge methods:
+    //       - `merge_objects`, which merged a collection of objects.
+    //       - `merge_shape`, which merges a whole shape.
+    //
+    //       Both methods should return a `Mapping`.
 }
 
 impl Default for Shape {

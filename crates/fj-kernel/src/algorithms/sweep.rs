@@ -17,6 +17,19 @@ pub fn sweep_shape(
     tolerance: Tolerance,
     color: [u8; 4],
 ) -> Shape {
+    // TASK: Consider the following alternative approach:
+    //       1. Create bottom
+    //          1. Clone original shape using `Shape::clone_and_create_mapping`.
+    //          2. Mirror it, to make sure the surface orientation is correct.
+    //       2. Create top
+    //          1. Clone original shape using `Shape::clone_and_create_mapping`.
+    //          2. Translate it.
+    //       3. Create the swept shape.
+    //          1. Merge bottom shape using `Shape::merge_shape`.
+    //          2. Merge top shape using `Shape::merge_shape`.
+    //       4. Use the available mappings to create the side edges.
+    //       5. Use the available mappings to create the side faces.
+
     let mut target = Shape::new();
 
     let translation = Transform::translation(path);
