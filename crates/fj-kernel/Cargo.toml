@@ -22,6 +22,8 @@ slotmap = "1.0.6"
 spade = "2.0.0"
 thiserror = "1.0.31"
 
+itertools="0.10.3"
+
 [dependencies.fj-interop]
 version = "0.6.0"
 path = "../fj-interop"
