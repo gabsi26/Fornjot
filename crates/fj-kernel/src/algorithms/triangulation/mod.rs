@@ -25,7 +25,7 @@ pub fn triangulate(
             Face::Face(brep) => {
                 let surface = brep.surface.get();
                 let approx = FaceApprox::new(&face, tolerance);
-
+                let meep = FaceApprox::new(&face, tolerance);
                 let points: Vec<_> = approx
                     .points
                     .into_iter()
@@ -35,6 +35,7 @@ pub fn triangulate(
                         surface.point_to_surface_coords(vertex.canonical())
                     })
                     .collect();
+
                 let face_as_polygon = Polygon::new(surface)
                     .with_exterior(approx.exterior.points.into_iter().map(
                         |point| {
@@ -57,8 +58,37 @@ pub fn triangulate(
                             })
                         },
                     ));
-
-                let mut triangles = delaunay::triangulate(points);
+                let exterior = meep
+                    .exterior
+                    .points
+                    .into_iter()
+                    .map(|point| {
+                        // Can't panic, unless the approximation wrongfully
+                        // generates points that are not in the surface.
+                        surface.point_to_surface_coords(point.canonical())
+                    })
+                    .collect();
+                let interior = meep
+                    .interiors
+                    .into_iter()
+                    .map(|interior| {
+                        interior
+                            .points
+                            .into_iter()
+                            .map(|point| {
+                                // Can't panic, unless the approximation
+                                // wrongfully generates points that are not in
+                                // the surface.
+                                surface
+                                    .point_to_surface_coords(point.canonical())
+                            })
+                            .collect()
+                    })
+                    .collect();
+                let mut triangles = delaunay::triangulate_constrained(
+                    points, exterior, interior,
+                );
+                // let mut triangles = delaunay::triangulate(points);
                 triangles.retain(|triangle| {
                     face_as_polygon.contains_triangle(
                         triangle.map(|point| point.local()),
