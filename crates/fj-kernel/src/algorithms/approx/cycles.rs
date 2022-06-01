@@ -5,7 +5,7 @@ use crate::{geometry, topology::Cycle};
 use super::{curves::approx_curve, edges::approximate_edge, Tolerance};
 
 /// An approximation of a [`Cycle`]
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub struct CycleApprox {
     /// The points that approximate the cycle
     pub points: Vec<geometry::Point<3, 3>>,
