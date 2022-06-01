@@ -25,7 +25,6 @@ pub fn triangulate(
             Face::Face(brep) => {
                 let surface = brep.surface.get();
                 let approx = FaceApprox::new(&face, tolerance);
-                let meep = FaceApprox::new(&face, tolerance);
                 let points: Vec<_> = approx
                     .points
                     .into_iter()
@@ -37,7 +36,7 @@ pub fn triangulate(
                     .collect();
 
                 let face_as_polygon = Polygon::new(surface)
-                    .with_exterior(approx.exterior.points.into_iter().map(
+                    .with_exterior(approx.exterior.points.iter().cloned().map(
                         |point| {
                             // Can't panic, unless the approximation wrongfully
                             // generates points that are not in the surface.
@@ -46,7 +45,7 @@ pub fn triangulate(
                                 .local()
                         },
                     ))
-                    .with_interiors(approx.interiors.into_iter().map(
+                    .with_interiors(approx.interiors.iter().cloned().map(
                         |interior| {
                             interior.points.into_iter().map(|point| {
                                 // Can't panic, unless the approximation
@@ -58,7 +57,7 @@ pub fn triangulate(
                             })
                         },
                     ));
-                let exterior = meep
+                let exterior = approx
                     .exterior
                     .points
                     .into_iter()
@@ -68,7 +67,7 @@ pub fn triangulate(
                         surface.point_to_surface_coords(point.canonical())
                     })
                     .collect();
-                let interior = meep
+                let interior = approx
                     .interiors
                     .into_iter()
                     .map(|interior| {
